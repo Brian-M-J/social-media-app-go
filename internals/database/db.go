@@ -5,6 +5,8 @@ import (
 
 	"gorm.io/driver/postgres"
 
+	"github.com/Brian-M-J/social-media-app-go/models/friendship"
+	"github.com/Brian-M-J/social-media-app-go/models/posts"
 	"github.com/Brian-M-J/social-media-app-go/models/users"
 	"gorm.io/gorm"
 )
@@ -35,6 +37,6 @@ func Config() {
 
 	DB = db
 
-	DB.AutoMigrate(&users.Users{})
+	DB.AutoMigrate(&users.Users{}, &friendship.Friendships{}, &posts.Posts{})
 
 }
