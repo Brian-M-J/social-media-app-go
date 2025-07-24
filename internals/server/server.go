@@ -12,7 +12,7 @@ func New() *fiber.App {
 }
 
 func Setup() {
-	app := fiber.New(fiber.Config{
+	app = fiber.New(fiber.Config{
 		ErrorHandler: errHandler,
 		BodyLimit:    16 * 1024 * 1024,
 	})
