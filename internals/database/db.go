@@ -1,7 +1,7 @@
 package database
 
 import (
-	"fmt"
+	"log"
 
 	"gorm.io/driver/postgres"
 
@@ -19,20 +19,17 @@ func Config() {
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 
 	if err != nil {
-		fmt.Printf("Unable to open database, error: %v\n", err)
-		panic(err)
+		log.Fatalf("Unable to open database, error: %v\n", err)
 	}
 
 	sql, err := db.DB()
 
 	if err != nil {
-		fmt.Printf("Unable to get sql database from gorm, error: %v\n", err)
-		panic(err)
+		log.Fatalf("Unable to get sql database from gorm, error: %v\n", err)
 	}
 
 	if err := sql.Ping(); err != nil {
-		fmt.Printf("Unable to connect to the database, error: %v\n", err)
-		panic(err)
+		log.Fatalf("Unable to connect to the database, error: %v\n", err)
 	}
 
 	DB = db
