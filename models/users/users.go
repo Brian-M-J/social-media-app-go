@@ -1,9 +1,14 @@
 package users
 
 import (
+	"context"
+	"fmt"
 	"time"
 
+	"github.com/Brian-M-J/social-media-app-go/internals/database"
+	"github.com/Brian-M-J/social-media-app-go/internals/dto"
 	"github.com/google/uuid"
+	"gorm.io/gorm"
 )
 
 type Users struct {
@@ -13,4 +18,38 @@ type Users struct {
 	Password  string    `json:"password"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
+
+	User *dto.User `gorm:"-"`
+}
+
+func New() *Users {
+	return &Users{}
+}
+
+func (u *Users) Create(ctx context.Context) error {
+	if err := database.Client().Create(&u).Error; err != nil {
+		fmt.Printf("Unable to create user: %v\n", err)
+		return err
+	}
+	return nil
+}
+
+func (u *Users) Get(ctx context.Context) error {
+	if err := database.Client().First(&u.User, u.ID).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			fmt.Printf("Error getting user: %v\n", err)
+			return err
+		}
+	}
+	return nil
+}
+
+func (u *Users) Delete(ctx context.Context) error {
+	if err := database.Client().Delete(u).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			fmt.Printf("Error deleting user: %v\n", err)
+			return err
+		}
+	}
+	return nil
 }

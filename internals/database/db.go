@@ -5,13 +5,14 @@ import (
 
 	"gorm.io/driver/postgres"
 
-	"github.com/Brian-M-J/social-media-app-go/models/friendship"
-	"github.com/Brian-M-J/social-media-app-go/models/posts"
-	"github.com/Brian-M-J/social-media-app-go/models/users"
 	"gorm.io/gorm"
 )
 
 var DB *gorm.DB
+
+func Client() *gorm.DB {
+	return DB
+}
 
 func Config() {
 	dsn := "user=brian database=postgres sslmode=disable"
@@ -33,7 +34,4 @@ func Config() {
 	}
 
 	DB = db
-
-	DB.AutoMigrate(&users.Users{}, &friendship.Friendships{}, &posts.Posts{})
-
 }
