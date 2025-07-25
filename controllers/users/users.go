@@ -67,3 +67,16 @@ func Delete(c *fiber.Ctx) error {
 	}
 	return c.SendStatus(fiber.StatusNoContent)
 }
+
+func GetAll(c *fiber.Ctx) error {
+	ctx := c.UserContext()
+	us := users.New()
+	us.Users = &dto.Users{}
+	if err := us.GetAll(ctx); err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return c.Status(fiber.StatusNotFound).JSON("Users not found!")
+		}
+		return c.Status(fiber.StatusInternalServerError).JSON("Internal Server Error")
+	}
+	return c.Status(fiber.StatusOK).JSON(us.Users)
+}

@@ -16,7 +16,8 @@ var notFoundHandler = func(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusNotFound).JSON("Requested resource not found")
 }
 
-func addRoutes(c *fiber.App) {
+func addRoutes(app *fiber.App) {
 	baseRouter := app.Group("/socio")
 	routes.Users(baseRouter)
+	routes.Friendships(baseRouter)
 }

@@ -19,7 +19,8 @@ type Users struct {
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 
-	User *dto.User `gorm:"-"`
+	User  *dto.User  `gorm:"-"`
+	Users *dto.Users `gorm:"-"`
 }
 
 func New() *Users {
@@ -48,6 +49,16 @@ func (u *Users) Delete(ctx context.Context) error {
 	if err := database.Client().Delete(u).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
 			fmt.Printf("Error deleting user: %v\n", err)
+			return err
+		}
+	}
+	return nil
+}
+
+func (u *Users) GetAll(ctx context.Context) error {
+	if err := database.Client().Find(&u.Users).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			fmt.Printf("Error retrieving users: %v\n", err)
 			return err
 		}
 	}
