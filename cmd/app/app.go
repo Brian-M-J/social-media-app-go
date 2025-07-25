@@ -3,12 +3,17 @@ package app
 import (
 	"log"
 
+	"github.com/Brian-M-J/social-media-app-go/internals/cache"
 	"github.com/Brian-M-J/social-media-app-go/internals/database"
+	"github.com/Brian-M-J/social-media-app-go/internals/notifications"
 	"github.com/Brian-M-J/social-media-app-go/internals/server"
 )
 
 func Setup() {
-	database.Config()
+	database.Connect()
+	cache.Connect()
+	notifications.InitNotificationsSystem()
+	notifications.Hydrate()
 
 	server.Setup()
 	app := server.New()

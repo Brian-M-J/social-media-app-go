@@ -2,6 +2,7 @@ package users
 
 import (
 	"github.com/Brian-M-J/social-media-app-go/internals/dto"
+	"github.com/Brian-M-J/social-media-app-go/internals/notifications"
 	"github.com/Brian-M-J/social-media-app-go/internals/validator"
 	"github.com/Brian-M-J/social-media-app-go/services/users"
 	"github.com/gofiber/fiber/v2"
@@ -17,7 +18,7 @@ func Add(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON("Incorrect input body")
 	}
 
-	if err := validator.Users(user); err != nil {
+	if err := validator.Payload(user); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON("Incorrect input body")
 	}
 	us := users.New()
@@ -26,6 +27,11 @@ func Add(c *fiber.Ctx) error {
 	us.User.Email = user.Email
 	us.User.Password = user.Password
 	us.Create(ctx)
+
+	notifications.Register(us.User.ID)
+
+	go notifications.ListenForNotifications(ctx, us.User.ID)
+
 	return c.Status(fiber.StatusCreated).JSON(us.User)
 }
 

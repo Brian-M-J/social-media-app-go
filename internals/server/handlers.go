@@ -20,4 +20,5 @@ func addRoutes(app *fiber.App) {
 	baseRouter := app.Group("/socio")
 	routes.Users(baseRouter)
 	routes.Friendships(baseRouter)
+	routes.Posts(baseRouter)
 }

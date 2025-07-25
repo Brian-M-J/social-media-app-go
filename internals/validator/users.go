@@ -6,7 +6,7 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-func Users(s interface{}) error {
+func Payload(s interface{}) error {
 	err := _validator.Struct(s)
 	if err != nil {
 		if _, ok := err.(*validator.InvalidValidationError); !ok {
