@@ -3,6 +3,7 @@ package database
 import (
 	"fmt"
 	"log"
+	"os"
 
 	"gorm.io/driver/postgres"
 
@@ -16,7 +17,10 @@ func Client() *gorm.DB {
 }
 
 func Connect() {
-	dsn := "user=brian database=postgres sslmode=disable"
+	dsn := os.Getenv("DATABASE_DSN")
+	if dsn == "" {
+		dsn = "user=brian database=postgres sslmode=disable"
+	}
 
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 
